@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bloguser">
+	<select id="get_VO" resultType="bloguservo" parameterType="bloguservo">
+		<![CDATA[
+			select		no,
+						name,
+						id,
+						passwd,
+						reg_date as regDate
+			from		blog_user
+			where		id = #{id} and passwd = password(#{passwd})
+		]]>
+	</select>
+	
+	<select id="get_VALUE" resultType="bloguservo" parameterType="map">
+		<![CDATA[
+			select		no,
+						name,
+						id,
+						passwd,
+						reg_date as regDate
+			from		blog_user
+			where		id = #{id} and passwd = password(#{passwd})
+		]]>
+	</select>
+	
+	<select id="get_ID" resultType="bloguservo" parameterType="string">
+		<![CDATA[
+			select		no,
+						name,
+						id,
+						passwd,
+						reg_date as regDate
+			from		blog_user
+			where		id = #{id}
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="bloguservo">
+		<![CDATA[
+			insert into user 
+				values(null, #{name}, #{id}, #{passwd}, now())
+		]]>
+	</insert>
+</mapper>
