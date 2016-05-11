@@ -22,4 +22,13 @@ public class PostDao {
 		List<PostVo> list = sqlSession.selectList("post.get_CATEGORY_ID", category_id);
 		return list;
 	}
+
+	public Long insert(PostVo vo) {
+		sqlSession.insert("post.insert_VO", vo);
+		return vo.getPostId();
+	}
+
+	public void delete(Long postId) {
+		sqlSession.insert("post.delete_ID", postId);
+	}
 }

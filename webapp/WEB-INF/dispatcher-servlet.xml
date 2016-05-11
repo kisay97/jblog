@@ -7,7 +7,7 @@
 						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 						http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
-	xmlns:mvc="http://www.springframework.org/schema/mvc">
+						xmlns:mvc="http://www.springframework.org/schema/mvc">
 	
 	<!-- 2. validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
@@ -83,13 +83,13 @@
 		</property>
 	</bean>
 	
+	<!-- 멀티파트 리졸버 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	
+	<!-- mapping="/assets/user_image/** 으로 들어오면 /temp/ 에서 찾는다 -->
+	<mvc:resources mapping="/assets/user_image/**" location="file:/temp/" />
+	
 	<!-- 자동으로 프록시 설정 -->
 	<aop:aspectj-autoproxy />
 	
 </beans>
-
-
-
-
-
-

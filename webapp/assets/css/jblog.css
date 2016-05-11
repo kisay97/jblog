@@ -61,12 +61,9 @@ div#header ul		{ height:20px }
 div#header li		{ float:right; margin-right:10px; }
 div#header li a 	{ color:#fff; font-weight:bold; text-decoration:none; }
 
-#header h1 a:hover	 { color:#79B30B; text-decoration:none  }
-#header h1 a:link	 { color:#79B30B; text-decoration:none  }
-#header h1 a:visited { color:#79B30B; text-decoration:none  }
-#header h1 a:active  { color:#79B30B; text-decoration:none  }
-
 div#container		{ text-align:left }
+
+div#header h1 a		{ color:#fff; font-weight:bold; text-decoration:none; }
 
 
 /* content */

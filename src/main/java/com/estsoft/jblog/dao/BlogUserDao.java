@@ -29,7 +29,8 @@ public class BlogUserDao {
 		return returnVo;
 	}
 
-	public void insert(BlogUserVo vo) {
+	public Long insert(BlogUserVo vo) {
 		sqlSession.insert("bloguser.insert", vo);
+		return vo.getNo();
 	}
 }

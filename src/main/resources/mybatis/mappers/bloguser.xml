@@ -40,8 +40,11 @@
 	
 	<insert id="insert" parameterType="bloguservo">
 		<![CDATA[
-			insert into user 
-				values(null, #{name}, #{id}, #{passwd}, now())
+			insert into blog_user 
+				values(null, #{name}, #{id}, password(#{passwd}), now())
 		]]>
+		<selectKey keyProperty="no" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
 	</insert>
 </mapper>

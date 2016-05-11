@@ -1,10 +1,21 @@
 package com.estsoft.jblog.vo;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class PostVo {
 	private Long postId;
+	
+	@NotNull
 	private Long categoryId;
+	
+	@NotEmpty
 	private String title;
+	
+	@NotEmpty
 	private String content;
+	
 	private String regDate;
 	
 	@Override

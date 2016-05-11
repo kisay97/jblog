@@ -18,4 +18,12 @@ public class PostService {
 		List<PostVo> list = dao.getList(category_id);
 		return list;
 	}
+
+	public Long insert(PostVo vo) {
+		return dao.insert(vo);
+	}
+
+	public void delete(Long postId) {
+		dao.delete(postId);
+	}
 }

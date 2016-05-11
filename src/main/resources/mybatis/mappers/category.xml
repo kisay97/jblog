@@ -13,4 +13,37 @@
 			where		blog_id = #{blog_id}
 		]]>
 	</select>
+	
+	<select id="get_NO" resultType="categoryvo" parameterType="long">
+		<![CDATA[
+			select		no,
+						blog_id,
+						name,
+						discription,
+						post_count as postCount
+			from		category
+			where		no = #{no}
+		]]>
+	</select>
+	
+	<insert id="insert_BLOGUSERVO" parameterType="map">
+		<![CDATA[
+			insert into category values(null, #{blog_id}, #{name}, #{description}, 0);
+		]]>
+	</insert>
+	
+	<delete id="delete_NO" parameterType="Long">
+		<![CDATA[
+			delete from category where no = #{no}
+		]]>
+	</delete>
+	
+	<insert id="insert_VO" parameterType="categoryvo">
+		<![CDATA[
+			insert into category values(null, #{blog_id}, #{name}, #{discription}, #{postCount});
+		]]>
+		<selectKey keyProperty="no" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
 </mapper>

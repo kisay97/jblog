@@ -21,7 +21,7 @@ public class UserService {
 		return user;
 	}
 
-	public void join(BlogUserVo vo) {
-		dao.insert(vo);
+	public Long join(BlogUserVo vo) {
+		return dao.insert(vo);
 	}
 }

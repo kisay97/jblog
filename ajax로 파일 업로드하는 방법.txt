@@ -1,0 +1,126 @@
+파일업로드 ajax로 구현하는법.
+
+1.
+dispatcher-servlet.xml 에 
+<!-- 멀티파트 리졸버 -->
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+	
+<!-- mapping="/assets/user_image/** 으로 들어오면 C:/temp 폴더에서 찾는다 라는 맵핑 -->
+<mvc:resources mapping="/assets/user_image/**" location="file:/temp/" />
+추가
+
+2.
+pom.xml에
+<!-- common fileupload -->
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.2.1</version>
+</dependency>
+<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>1.4</version>
+</dependency>
+추가
+
+3.
+업로드 할 파일을 선택하는 jsp 파일에서
+<script>
+$(function(){
+$("input[type='file']").change(function(){
+	$file = $(this).val();
+	if($file == null || $.isEmptyObject($file)) return;
+	
+	var formData = new FormData(document.getElementById('form 태그의 아이디'));<!-- #은 붙이지 않음 -->
+	
+	$.ajax({
+		url : "$ajax 업로드를 처리하는 URL",
+		data : formData,
+		processData : false,
+		contentType : false,
+		type : "POST",
+		success : function(response){
+			$("#이미지를 출력하는 태그의 아이디").attr("src", "${pageContext.request.contextPath}" + response.data );
+		},
+		error : function(xhr, status, error) {
+			console.error(status + " : " + error);
+		}
+	})
+})
+})
+</script>
+추가
+
+4.
+컨트롤러에서
+private static final String SAVE_PATH = "/temp";
+
+@RequestMapping("처리할 URL")
+@ResponseBody
+public Map<String, Object> ajaxList(
+		MultipartHttpServletRequest request
+){	
+	Iterator<String> itr = request.getFileNames(); /* 폼에 파일 선택이 여러개 있으면 여러개 나옴 */
+	Map<String, Object> map = new HashMap<String, Object>();
+	if(itr.hasNext()){ /* 지금은 하나라 if, 여러개면 while */
+		//fileUpload
+		MultipartFile mpf = request.getFile(itr.next());
+		if(mpf.isEmpty() == false){ /* 파일 유효성 확인 */
+			String fileOriginalName = mpf.getOriginalFilename(); //파일 이름
+			String extName = fileOriginalName.substring( fileOriginalName.lastIndexOf(".") + 1, fileOriginalName.length() ); //파일 확장자
+			String saveFileName = genSaveFileName( extName );
+			writeFile(mpf, SAVE_PATH, saveFileName);
+		        
+			map.put("result", "success"); //response로 '결과 : 성공'을 보내줌
+			map.put("data", "/assets/user_image/" + saveFileName); //response로 '데이터 : 파일URL'을 보내줌
+		        
+			//upload database
+			BlogUserVo user = userService.get(id);
+			blogService.updateLogo(user.getNo(), saveFileName); //업로드한 파일명 DB에 저장
+		}
+			
+		//return map
+		return map;
+	}else{	
+		return map;
+	}
+}
+
+//실질적으로 파일을 업로드하는 함수
+private void writeFile( MultipartFile file, String path, String fileName ) {
+	FileOutputStream fos = null;
+	try {
+		byte fileData[] = file.getBytes();
+		fos = new FileOutputStream( path + "/" + fileName ); //'경로/파일이름'으로 업로드
+		fos.write(fileData); //파일 업로드
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (fos != null) {
+			try {
+				fos.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+}
+
+//중복되지 않도록 파일 이름 지정해주는 함수(밀리세컨드 단위로 이름을 지어서 저장)
+private String genSaveFileName( String extName ) {
+	
+	Calendar calendar = Calendar.getInstance();                                                                                                                                                                                               
+	String fileName = "";
+       
+	fileName += calendar.get( Calendar.YEAR );
+	fileName += calendar.get( Calendar.MONTH );
+	fileName += calendar.get( Calendar.DATE );
+	fileName += calendar.get( Calendar.HOUR );
+	fileName += calendar.get( Calendar.MINUTE );
+	fileName += calendar.get( Calendar.SECOND );
+	fileName += calendar.get( Calendar.MILLISECOND );
+	fileName += ( "." + extName );
+        
+	return fileName;
+}
+추가

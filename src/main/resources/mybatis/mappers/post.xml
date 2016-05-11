@@ -13,4 +13,21 @@
 			where		category_id = #{category_id}
 		]]>
 	</select>
+	
+	<insert id="insert_VO" parameterType="postvo">
+		<![CDATA[
+			insert into post values(
+				null, #{categoryId}, #{title}, #{content}, now()
+			)
+		]]>
+		<selectKey keyProperty="postId" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	
+	<delete id="delete_ID" parameterType="Long">
+		<![CDATA[
+			delete from post where post_id = #{postId}
+		]]>
+	</delete>
 </mapper>

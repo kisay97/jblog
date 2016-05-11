@@ -11,4 +11,22 @@
 			where		blog_id = #{blog_id}
 		]]>
 	</select>
+	
+	<insert id="insert_BLOGUSERVO" parameterType="map">
+		<![CDATA[
+			insert into blog values(#{blog_id}, #{title}, #{logo});
+		]]>
+	</insert>
+	
+	<update id="updateLogo_VALUE" parameterType="map">
+		<![CDATA[
+			update blog set logo=#{logo} where blog_id = #{blog_id};
+		]]>
+	</update>
+	
+	<update id="updateTitle_VALUE" parameterType="map">
+		<![CDATA[
+			update blog set title=#{title} where blog_id = #{blog_id};
+		]]>
+	</update>
 </mapper>
